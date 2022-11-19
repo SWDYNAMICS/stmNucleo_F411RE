@@ -9,9 +9,9 @@
 
 int main(void)
 {
-	hwInit();
-	apInit();
+    hwInit();
+    apInit();
 
-	apMain();
-	return 0;
+    apMain();
+    return 0;
 }
