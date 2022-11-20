@@ -9,17 +9,9 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include src/lib/cube_f411/Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
--include src/lib/cube_f411/Debug/Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
--include src/lib/cube_f411/Debug/Core/Startup/subdir.mk
--include src/lib/cube_f411/Debug/Core/Src/subdir.mk
--include src/lib/cube_f411/Debug/subdir.mk
--include src/hw/driver/subdir.mk
--include src/hw/subdir.mk
--include src/bsp/startup/subdir.mk
--include src/bsp/subdir.mk
--include src/ap/subdir.mk
--include src/subdir.mk
+-include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
+-include Core/Startup/subdir.mk
+-include Core/Src/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -42,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := stmf411re_fw
+BUILD_ARTIFACT_NAME := cube_f411
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-stmf411re_fw.elf \
+cube_f411.elf \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-stmf411re_fw.list \
+cube_f411.list \
 
 OBJCOPY_BIN += \
-stmf411re_fw.bin \
+cube_f411.bin \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: stmf411re_fw.elf secondary-outputs
+main-build: cube_f411.elf secondary-outputs
 
 # Tool invocations
-stmf411re_fw.elf: $(OBJS) $(USER_OBJS) C:\GithubTemp\stm32F411RE\stmf411re_fw\src\bsp\ldscript\STM32F411RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "stmf411re_fw.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\GithubTemp\stm32F411RE\stmf411re_fw\src\bsp\ldscript\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stmf411re_fw.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+cube_f411.elf: $(OBJS) $(USER_OBJS) C:\GithubTemp\stm32F411RE\stmf411re_fw\src\lib\cube_f411\STM32F411RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "cube_f411.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\GithubTemp\stm32F411RE\stmf411re_fw\src\lib\cube_f411\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="cube_f411.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -78,19 +70,19 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-stmf411re_fw.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "stmf411re_fw.list"
+cube_f411.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "cube_f411.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-stmf411re_fw.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "stmf411re_fw.bin"
+cube_f411.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "cube_f411.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) default.size.stdout stmf411re_fw.bin stmf411re_fw.elf stmf411re_fw.list
+	-$(RM) cube_f411.bin cube_f411.elf cube_f411.list default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)

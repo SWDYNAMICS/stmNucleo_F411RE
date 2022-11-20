@@ -9,5 +9,6 @@
 
 void hwInit()
 {
-	bspInit();
+  bspInit();
+  ledInit();
 }

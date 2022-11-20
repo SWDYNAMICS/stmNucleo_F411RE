@@ -6,6 +6,7 @@
 "./src/bsp/sysmem.o"
 "./src/bsp/system_stm32f4xx.o"
 "./src/bsp/startup/startup_stm32f411retx.o"
+"./src/hw/driver/led.o"
 "./src/hw/hw.o"
 "./src/lib/cube_f411/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o"
 "./src/lib/cube_f411/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o"
