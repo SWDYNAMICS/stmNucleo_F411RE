@@ -19,11 +19,12 @@ typedef struct
 
 led_tbl_t led_tbl[3]=//LED_MAX_CHANNEL
 {
-	{GPIOA, GPIO_PIN_5, GPIO_PIN_SET, GPIO_PIN_RESET}
+	{GPIOC, GPIO_PIN_13, GPIO_PIN_SET, GPIO_PIN_RESET}
 };
 
 bool ledInit(void)
 {
+	bool ret = true;
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 
 	__HAL_RCC_GPIOA_CLK_ENABLE();
@@ -38,6 +39,7 @@ bool ledInit(void)
 		GPIO_InitStruct.Pin = led_tbl[i].pin;
 		HAL_GPIO_Init(led_tbl[i].port, &GPIO_InitStruct);
 	}
+	return ret;
 }
 void ledOn(uint8_t ch)
 {
