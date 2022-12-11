@@ -1,21 +1,15 @@
-#include "ap.h"
 
+
+#include "ap.h"
+extern uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 void apInit(void) {
 
 }
 
 void apMain(void) {
 	while (1) {
-		ledOn(_DEF_LED1);
+		ledToggle(_DEF_LED1);
 		delay(500);
-		ledOff(_DEF_LED1);
-		delay(500);
-
-		ledToggle(_DEF_LED1);
-		delay(20);
-		ledToggle(_DEF_LED1);
-		delay(20);
-		ledToggle(_DEF_LED1);
-		delay(20);
+		CDC_Transmit_FS("test\n", 6);
 	}
 }

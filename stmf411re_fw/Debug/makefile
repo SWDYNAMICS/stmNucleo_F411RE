@@ -9,11 +9,11 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include src/lib/cube_f411/Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
--include src/lib/cube_f411/Debug/Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
--include src/lib/cube_f411/Debug/Core/Startup/subdir.mk
--include src/lib/cube_f411/Debug/Core/Src/subdir.mk
--include src/lib/cube_f411/Debug/subdir.mk
+-include src/lib/cube_F411CE/USB_DEVICE/Target/subdir.mk
+-include src/lib/cube_F411CE/USB_DEVICE/App/subdir.mk
+-include src/lib/cube_F411CE/Middlewares/ST/STM32_USB_Device_Library/Core/Src/subdir.mk
+-include src/lib/cube_F411CE/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/subdir.mk
+-include src/lib/cube_F411CE/Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include src/hw/driver/subdir.mk
 -include src/hw/subdir.mk
 -include src/bsp/startup/subdir.mk
@@ -68,8 +68,8 @@ all: main-build
 main-build: stmf411re_fw.elf secondary-outputs
 
 # Tool invocations
-stmf411re_fw.elf: $(OBJS) $(USER_OBJS) C:\GithubTemp\stm32F411RE\stmf411re_fw\src\bsp\ldscript\STM32F411RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "stmf411re_fw.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\GithubTemp\stm32F411RE\stmf411re_fw\src\bsp\ldscript\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stmf411re_fw.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+stmf411re_fw.elf: $(OBJS) $(USER_OBJS) C:\GithubTemp\stm32F411RE\stmf411re_fw\src\bsp\ldscript\STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "stmf411re_fw.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\GithubTemp\stm32F411RE\stmf411re_fw\src\bsp\ldscript\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stmf411re_fw.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
