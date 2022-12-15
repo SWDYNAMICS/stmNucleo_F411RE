@@ -21,9 +21,17 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_cdc_if.h"
 
+USBD_CDC_LineCodingTypeDef LineCoding =
+{
+	115200,
+	0x00,
+	0x00,
+	0x00
+};
+
 /* USER CODE BEGIN INCLUDE */
-uint32_t rx_in;
-uint32_t rx_out;
+uint32_t rx_in; 			//In buffer
+uint32_t rx_out;			//read buffer
 uint32_t rx_len=512;
 uint8_t rx_buf[512];
 
@@ -51,24 +59,15 @@ uint8_t cdcRead(void)
 void cdcDataIn(uint8_t rx_data)
 {
 	uint32_t next_rx_in;
-
-	rx_buf[rx_in % rx_len] = rx_data;
-
 	next_rx_in = (rx_in + 1) % rx_len;
-
-	if(next_rx_in != rx_out)// 다음 증가할 in 인덱스가 out과 다를시
+	rx_buf[rx_in] = rx_data;
+	if(next_rx_in != rx_out)
 	{
 		rx_in = next_rx_in;
 	}
 }
 uint32_t cdcWrite(uint8_t *pData, uint32_t length)
 {
-	/*
-	 * uint8_t 주소를 받아 정상적으로 송신했을 시에 해당 length를 반환한다.
-	 * PC에서 문자열을 입력하면 Interrupt cdc_receive 함수가 동작하고 cdcIn 함수를 통해 데이터가 rx_buf에 들어간다 (PC -> MCU)
-	 * MCU에서 값을 읽어드리면 이것을 다시 PC 로 수신하는 함수가 바로 본함수 이다.
-	 * */
-
 	uint32_t pre_time;
 	uint8_t ret;
 
@@ -94,6 +93,11 @@ uint32_t cdcWrite(uint8_t *pData, uint32_t length)
 	}
 	return 0;
 }
+uint32_t cdcGetBaud(void)
+{
+	return LineCoding.bitrate;
+}
+
 
 
 
@@ -257,6 +261,7 @@ static int8_t CDC_DeInit_FS(void)
   */
 static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 {
+	//...Repository\STM32Cube_FW_F4_V1.26.2\Projects\STM32446E_EVAL\Applications\USB_Device\src\usbd_cdc_interface.c 참고
   /* USER CODE BEGIN 5 */
   switch(cmd)
   {
@@ -297,12 +302,24 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   /*                                        4 - Space                            */
   /* 6      | bDataBits  |   1   | Number Data bits (5, 6, 7, 8 or 16).          */
   /*******************************************************************************/
-    case CDC_SET_LINE_CODING:
-
+    case CDC_SET_LINE_CODING: // MCU로 데이터를 set
+    	LineCoding.bitrate 		 = (uint32_t)(pbuf[0]);
+    	LineCoding.bitrate 		|= (uint32_t)(pbuf[1]) << 8;
+    	LineCoding.bitrate 		|= (uint32_t)(pbuf[2]) << 16;
+    	LineCoding.bitrate 		|= (uint32_t)(pbuf[3]) << 24;
+    	LineCoding.format 		 = pbuf[4];
+    	LineCoding.paritytype  = pbuf[5];
+    	LineCoding.datatype 	 = pbuf[6];
     break;
 
-    case CDC_GET_LINE_CODING:
-
+    case CDC_GET_LINE_CODING: // PC로 데이터를 올려줌
+    	pbuf[0] = (uint8_t)(LineCoding.bitrate);
+    	pbuf[1] = (uint8_t)(LineCoding.bitrate >> 8);
+    	pbuf[2] = (uint8_t)(LineCoding.bitrate >> 16);
+    	pbuf[3] = (uint8_t)(LineCoding.bitrate >> 24);
+    	pbuf[4] = LineCoding.format;
+    	pbuf[5] = LineCoding.paritytype;
+    	pbuf[6] = LineCoding.datatype;
     break;
 
     case CDC_SET_CONTROL_LINE_STATE:
@@ -322,8 +339,8 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 }
 
 /**
-  * @brief  Data received over USB OUT(PC -> MCU) endpoint are sent over CDC interface
-  *         through this call back function.
+  * @brief  Data received over USB OUT endpoint are sent over CDC interface
+  *         through this function.
   *
   *         @note
   *         This function will issue a NAK packet on any OUT packet received on
@@ -344,7 +361,7 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 
   for(int i = 0 ; i < *Len ; i++)
   {
-  	cdcDataIn(Buf[i]);// 인터럽트 발생시 data in
+  	cdcDataIn(Buf[i]);// ?��?��?��?�� 발생?�� data in
   }
   return (USBD_OK);
   /* USER CODE END 6 */
@@ -355,7 +372,7 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   *         Data to send over USB IN endpoint are sent over CDC interface
   *         through this function.
   *         @note
-  *				  버퍼에 들어온 데이터 길이만큼 usb 로 전송
+  *
   *
   * @param  Buf: Buffer of data to be sent
   * @param  Len: Number of data to be sent (in bytes)

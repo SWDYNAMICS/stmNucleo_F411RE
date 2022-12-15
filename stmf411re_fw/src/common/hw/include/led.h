@@ -11,7 +11,8 @@
 #include "hw_def.h"
 
 #ifdef _USE_HW_LED
-#define LED_MAX_CHANNEL 			HW_MAX_
+
+#define				LED_MAX_CHANNEL 			HW_LED_MAX_CH
 
 bool ledInit(void);
 void ledOn(uint8_t ch);

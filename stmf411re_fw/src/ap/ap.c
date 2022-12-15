@@ -2,10 +2,8 @@
 
 #include "ap.h"
 
-extern uint32_t cdcAvailable(void);
-extern uint8_t cdcRead(void);
-extern void cdcDataIn(uint8_t rx_data);
-extern uint32_t cdcWrite(uint8_t *pData, uint32_t length);
+
+
 
 void apInit(void)
 {
@@ -15,7 +13,9 @@ void apInit(void)
 void apMain(void)
 {
 	uint32_t pre_time;
+	uint32_t pre_baud;
 
+	pre_baud = uartGetBaud(_DEF_UART1);
 	pre_time = millis();
 
 
@@ -27,15 +27,18 @@ void apMain(void)
 			ledToggle(_DEF_LED1);
 		}
 
-		if(cdcAvailable() > 0 )
+		if(uartAvailable(_DEF_UART1) > 0 )
 		{
 			uint8_t rx_data;
 
-			rx_data = cdcRead();
-			cdcWrite((uint8_t *)"RXDATA: ", 7);
-			cdcWrite(&rx_data, 1);
-			cdcWrite((uint8_t *)"\n",2);
-		}
+			rx_data = uartRead(_DEF_UART1);
 
+			uartPrint(_DEF_UART1, "RX_DATA = %c , 0x%x\n", rx_data, rx_data);
+		}
+		if(pre_baud != uartGetBaud(_DEF_UART1))
+		{
+			pre_baud = uartGetBaud(_DEF_UART1);
+			uartPrint(_DEF_UART1, "Changed buad rate: %d \n", uartGetBaud(_DEF_UART1));
+		}
 	}
 }
