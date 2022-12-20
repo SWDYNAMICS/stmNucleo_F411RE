@@ -21,15 +21,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_cdc_if.h"
 
-USBD_CDC_LineCodingTypeDef LineCoding =
-{
-	115200,
-	0x00,
-	0x00,
-	0x00
-};
-
 /* USER CODE BEGIN INCLUDE */
+USBD_CDC_LineCodingTypeDef LineCoding;
+
 uint32_t rx_in; 			//In buffer
 uint32_t rx_out;			//read buffer
 uint32_t rx_len=512;
@@ -261,7 +255,6 @@ static int8_t CDC_DeInit_FS(void)
   */
 static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 {
-	//...Repository\STM32Cube_FW_F4_V1.26.2\Projects\STM32446E_EVAL\Applications\USB_Device\src\usbd_cdc_interface.c 참고
   /* USER CODE BEGIN 5 */
   switch(cmd)
   {
@@ -302,7 +295,7 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   /*                                        4 - Space                            */
   /* 6      | bDataBits  |   1   | Number Data bits (5, 6, 7, 8 or 16).          */
   /*******************************************************************************/
-    case CDC_SET_LINE_CODING: // MCU로 데이터를 set
+    case CDC_SET_LINE_CODING: // MCU�? ?��?��?���? set
     	LineCoding.bitrate 		 = (uint32_t)(pbuf[0]);
     	LineCoding.bitrate 		|= (uint32_t)(pbuf[1]) << 8;
     	LineCoding.bitrate 		|= (uint32_t)(pbuf[2]) << 16;
@@ -312,7 +305,7 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
     	LineCoding.datatype 	 = pbuf[6];
     break;
 
-    case CDC_GET_LINE_CODING: // PC로 데이터를 올려줌
+    case CDC_GET_LINE_CODING: // PC�? ?��?��?���? ?��?���?
     	pbuf[0] = (uint8_t)(LineCoding.bitrate);
     	pbuf[1] = (uint8_t)(LineCoding.bitrate >> 8);
     	pbuf[2] = (uint8_t)(LineCoding.bitrate >> 16);
