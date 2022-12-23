@@ -7,6 +7,7 @@
 O_SRCS += \
 ../src/lib/cube_F411CE/Debug/Core/Src/gpio.o \
 ../src/lib/cube_F411CE/Debug/Core/Src/main.o \
+../src/lib/cube_F411CE/Debug/Core/Src/rtc.o \
 ../src/lib/cube_F411CE/Debug/Core/Src/stm32f4xx_hal_msp.o \
 ../src/lib/cube_F411CE/Debug/Core/Src/stm32f4xx_it.o \
 ../src/lib/cube_F411CE/Debug/Core/Src/syscalls.o \

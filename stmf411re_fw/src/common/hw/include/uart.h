@@ -19,7 +19,7 @@ bool		  uartOpen(uint8_t ch, uint32_t baud);
 uint32_t  uartAvailable(uint8_t ch);
 uint8_t   uartRead(uint8_t ch);
 uint32_t  uartWrite(uint8_t ch, uint8_t *pData, uint32_t legnth);
-uint32_t 	uartPrint(uint8_t ch, char* fmt, ...); // 가변인자
+uint32_t 	uartPrintf(uint8_t ch, char* fmt, ...); // 가변인자
 uint32_t  uartGetBaud(uint8_t ch);
 
 #endif

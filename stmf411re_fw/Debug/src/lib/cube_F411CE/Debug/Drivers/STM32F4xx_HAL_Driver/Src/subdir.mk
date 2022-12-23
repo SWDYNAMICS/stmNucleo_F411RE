@@ -20,6 +20,8 @@ O_SRCS += \
 ../src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.o \
 ../src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.o \
 ../src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.o \
+../src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc.o \
+../src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rtc_ex.o \
 ../src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.o \
 ../src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.o \
 ../src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.o 
