@@ -6,10 +6,15 @@
  */
 #include "uart.h"
 #include "cdc.h"
+#include "qbuffer.h"
 
 UART_HandleTypeDef huart1;
 
 static bool is_open[UART_MAX_CHANNEL];
+
+static qbuffer_t qbuffer[UART_MAX_CHANNEL];
+static uint8_t rx_buf[512];
+static uint8_t rx_data[UART_MAX_CHANNEL];
 
 bool uartInit(void)
 {
@@ -33,13 +38,16 @@ bool uartOpen(uint8_t ch, uint32_t baud)
 
 		case _DEF_UART2:
 			huart1.Instance 					= USART1;
-			huart1.Init.BaudRate 			= 115200;
+			huart1.Init.BaudRate 			= baud;
 			huart1.Init.WordLength		= UART_WORDLENGTH_8B;
 			huart1.Init.StopBits 			= UART_STOPBITS_1;
 			huart1.Init.Parity 				= UART_PARITY_NONE;
 			huart1.Init.Mode 					= UART_MODE_TX_RX;
 			huart1.Init.HwFlowCtl 		= UART_HWCONTROL_NONE;
 			huart1.Init.OverSampling 	= UART_OVERSAMPLING_16;
+
+			qbufferCreate(&qbuffer[_DEF_UART2], &rx_buf[0], 256);
+
 			if (HAL_UART_Init(&huart1) != HAL_OK)
 			{
 				ret = false;
@@ -48,6 +56,11 @@ bool uartOpen(uint8_t ch, uint32_t baud)
 			{
 				ret = true;
 				is_open[ch] = true;
+
+				if(HAL_UART_Receive_IT(&huart1, (uint8_t *)&rx_data[_DEF_UART2], 1) != HAL_OK)
+				{
+				  ret = false;
+				}
 			}
 			break;
 	}
@@ -63,7 +76,9 @@ uint32_t uartAvailable(uint8_t ch)
 		case _DEF_UART1: // 첫번째 채널 uart -> 1. cdc 추
 			ret = cdcAvailable();
 			break;
-
+		case _DEF_UART2:
+		  ret = qbufferAvailable(&qbuffer[_DEF_UART2]);
+		  break;
 	}
 
 	return ret;
@@ -77,6 +92,9 @@ uint8_t uartRead(uint8_t ch)
 		case _DEF_UART1:
 			ret = cdcRead();
 			break;
+		case _DEF_UART2:
+		  qbufferRead(&qbuffer[_DEF_UART2], &ret, 1);
+		  break;
 	}
 
 	return ret;
@@ -136,6 +154,26 @@ uint32_t uartGetBaud(uint8_t ch)
 }
 
 
+
+
+
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+  if(huart1.Instance == USART1)
+  {
+
+  }
+}
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if(huart1.Instance == USART1)
+  {
+    qbufferWrite(&qbuffer[_DEF_UART2], &rx_data[_DEF_UART2], 1);
+    /* received 1 byte data will be sent to our buffer
+     * and to receive 1byte again, recall HAL_UART_Receive_IT*/
+    HAL_UART_Receive_IT(&huart1, (uint8_t *)&rx_data[_DEF_UART2], 1);
+  }
+}
 
 
 

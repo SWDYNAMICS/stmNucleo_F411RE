@@ -1,0 +1,46 @@
+qbuffer 은 송신용
+rx_buf 는 수신용으로 선언 
+
+수신 = 인터럽트
+송신 = 폴링
+
+* HAL_UART_Receive_IT(&UartHandle, (uint8_t *)aRxBuffer, RXBUFFERSIZE)
+수신 인터럽트 함수
+
+** HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
+완료되었을 때 콜백함수
+
+HAL_UART_IRQHandler는 인터럽트 핸들러 함수이다. 
+<HAL_UART_IRQHandler의 역할>
+1. HAL_UART_ErrorCallback(huart) 호출
+2. 수신 됐을 경우에 UART_Receive_IT를 호출하고
+3. HAL_UART_RxCpltCallback(huart)를 호출 
+
+__weak 타입은 다른 파일에서 같은 함수를 만들면 새롭게 만들어진 non-weak 타입이 호출된다.
+
+수신버퍼 사이즈를 지정해주는 작업이 uartOpen에 추가되어야함
+	-> HAL_UART_Receive_IT 함수 예시
+
+  if(HAL_UART_Receive_IT(&UartHandle, (uint8_t *)aRxBuffer, RXBUFFERSIZE) != HAL_OK)
+  {
+    /* Transfer error in reception process */
+    Error_Handler();
+  }
+
+ 예시처럼 호출하면 aRxBuffer에 수신 데이터가 저장될 것이다.
+
+ <디버깅>
+   숫자 1입력시,
+   HAL_UART_RxCpltCallback 호출 >> qbufferWrite >> HAL_UART_Receive_IT
+
+   rx_data 에 아스키 49 들어온거 확인 
+
+   !! : HAL_UART_RxCpltCallback 에서 HAL_UART_Receive_IT 를 다시 호출하여 한바이트를 받을 수 있도록 해주어야한다. 
+
+      UART 인터럽트 함수를 browse 하다보면 UART_Recieve_IT 함수에서 컴플리트를 하기전에 인터럽트를 비활성화 시킨다.
+
+
+      바람선생님께서는 빠르게 송신할때 인터럽트도 많이 걸리게 되어 overrun을 겪으신 적이 있음.
+      -> DMA가 차선책
+
+      
