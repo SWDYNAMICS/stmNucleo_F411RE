@@ -26,8 +26,8 @@ USBD_CDC_LineCodingTypeDef LineCoding;
 
 uint32_t rx_in; 			//In buffer
 uint32_t rx_out;			//read buffer
-uint32_t rx_len=512;
-uint8_t rx_buf[512];
+uint32_t rx_len=256;
+uint8_t rx_buf[256];
 
 uint32_t cdcAvailable(void)
 {
@@ -295,7 +295,7 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   /*                                        4 - Space                            */
   /* 6      | bDataBits  |   1   | Number Data bits (5, 6, 7, 8 or 16).          */
   /*******************************************************************************/
-    case CDC_SET_LINE_CODING: // MCUï¿?? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿?? set
+    case CDC_SET_LINE_CODING: // MCUï¿½?? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½?? set
     	LineCoding.bitrate 		 = (uint32_t)(pbuf[0]);
     	LineCoding.bitrate 		|= (uint32_t)(pbuf[1]) << 8;
     	LineCoding.bitrate 		|= (uint32_t)(pbuf[2]) << 16;
@@ -305,7 +305,7 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
     	LineCoding.datatype 	 = pbuf[6];
     break;
 
-    case CDC_GET_LINE_CODING: // PCï¿?? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿?? ?ï¿½ï¿½?ï¿½ï¿½ï¿??
+    case CDC_GET_LINE_CODING: // PCï¿½?? ?ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½ï¿½?? ?ï¿½ï¿½?ï¿½ï¿½ï¿½??
     	pbuf[0] = (uint8_t)(LineCoding.bitrate);
     	pbuf[1] = (uint8_t)(LineCoding.bitrate >> 8);
     	pbuf[2] = (uint8_t)(LineCoding.bitrate >> 16);

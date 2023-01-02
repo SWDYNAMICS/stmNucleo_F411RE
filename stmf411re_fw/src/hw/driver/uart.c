@@ -9,12 +9,13 @@
 #include "qbuffer.h"
 
 UART_HandleTypeDef huart1;
+DMA_HandleTypeDef hdma_usart1_rx;
 
 static bool is_open[UART_MAX_CHANNEL];
 
 static qbuffer_t qbuffer[UART_MAX_CHANNEL];
-static uint8_t rx_buf[512];
-static uint8_t rx_data[UART_MAX_CHANNEL];
+static uint8_t rx_buf[256];
+//static uint8_t rx_data[UART_MAX_CHANNEL];
 
 bool uartInit(void)
 {
@@ -46,7 +47,11 @@ bool uartOpen(uint8_t ch, uint32_t baud)
 			huart1.Init.HwFlowCtl 		= UART_HWCONTROL_NONE;
 			huart1.Init.OverSampling 	= UART_OVERSAMPLING_16;
 
-			qbufferCreate(&qbuffer[_DEF_UART2], &rx_buf[0], 256);
+			qbufferCreate(&qbuffer[ch], &rx_buf[0], 256);
+
+      __HAL_RCC_DMA2_CLK_ENABLE();
+      HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 0, 0);
+      HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);
 
 			if (HAL_UART_Init(&huart1) != HAL_OK)
 			{
@@ -57,10 +62,14 @@ bool uartOpen(uint8_t ch, uint32_t baud)
 				ret = true;
 				is_open[ch] = true;
 
-				if(HAL_UART_Receive_IT(&huart1, (uint8_t *)&rx_data[_DEF_UART2], 1) != HAL_OK)
+				if(HAL_UART_Receive_DMA(&huart1, (uint8_t *)&rx_buf[0], 256) != HAL_OK)
 				{
+				  /* From dma, data will be received.*/
 				  ret = false;
 				}
+				/* FLUSH */
+				qbuffer[ch].in  = qbuffer[ch].len - hdma_usart1_rx.Instance->NDTR;
+				qbuffer[ch].out = qbuffer[ch].in;
 			}
 			break;
 	}
@@ -70,6 +79,7 @@ bool uartOpen(uint8_t ch, uint32_t baud)
 uint32_t uartAvailable(uint8_t ch)
 {
 	uint32_t ret = 0;
+	static uint32_t pre_time;
 
 	switch(ch)
 	{
@@ -77,7 +87,14 @@ uint32_t uartAvailable(uint8_t ch)
 			ret = cdcAvailable();
 			break;
 		case _DEF_UART2:
-		  ret = qbufferAvailable(&qbuffer[_DEF_UART2]);
+
+		  qbuffer[ch].in = qbuffer[ch].len - hdma_usart1_rx.Instance->NDTR;
+		  if (millis() - pre_time > 500)
+		  {
+		    uartPrintf(ch, "qbuffer[ch].in = %d\n", qbuffer[ch].in);
+		    pre_time = millis();
+		  }
+		  ret = qbufferAvailable(&qbuffer[ch]);
 		  break;
 	}
 
@@ -166,6 +183,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 }
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+#if 0
   if(huart1.Instance == USART1)
   {
     qbufferWrite(&qbuffer[_DEF_UART2], &rx_data[_DEF_UART2], 1);
@@ -173,6 +191,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
      * and to receive 1byte again, recall HAL_UART_Receive_IT*/
     HAL_UART_Receive_IT(&huart1, (uint8_t *)&rx_data[_DEF_UART2], 1);
   }
+#endif
 }
 
 
@@ -203,6 +222,25 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+    /* USART1 DMA Init */
+    /* USART1_RX Init */
+    hdma_usart1_rx.Instance = DMA2_Stream2;
+    hdma_usart1_rx.Init.Channel = DMA_CHANNEL_4;
+    hdma_usart1_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_usart1_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_usart1_rx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_usart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_usart1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    hdma_usart1_rx.Init.Mode = DMA_CIRCULAR;
+    hdma_usart1_rx.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_usart1_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    if (HAL_DMA_Init(&hdma_usart1_rx) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    __HAL_LINKDMA(uartHandle,hdmarx,hdma_usart1_rx);
+
     /* USART1 interrupt Init */
     HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
@@ -228,6 +266,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     PA10     ------> USART1_RX
     */
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_9|GPIO_PIN_10);
+
+    /* USART1 DMA DeInit */
+    HAL_DMA_DeInit(uartHandle->hdmarx);
 
     /* USART1 interrupt Deinit */
     HAL_NVIC_DisableIRQ(USART1_IRQn);

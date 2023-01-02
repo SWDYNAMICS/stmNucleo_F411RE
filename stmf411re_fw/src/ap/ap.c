@@ -1,7 +1,7 @@
 
 
 #include "ap.h"
-
+#include "qbuffer.h"
 
 
 
@@ -38,7 +38,7 @@ void apMain(void)
 		  uint8_t rx_data;
 
 		  rx_data = uartRead(_DEF_UART2);
-		  uartPrintf(_DEF_UART2, "UART1 Rx %c %x\n", rx_data, rx_data);
+		  uartPrintf(_DEF_UART2, "UART1 DMA Rx %c %x \n", rx_data, rx_data);
 		}
 
 	}
