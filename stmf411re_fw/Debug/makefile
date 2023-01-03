@@ -24,6 +24,7 @@ RM := rm -rf
 -include src/lib/cube_F411CE/Debug/subdir.mk
 -include src/hw/driver/subdir.mk
 -include src/hw/subdir.mk
+-include src/common/core/subdir.mk
 -include src/bsp/startup/subdir.mk
 -include src/bsp/subdir.mk
 -include src/ap/subdir.mk

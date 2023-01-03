@@ -47,6 +47,8 @@ bool uartOpen(uint8_t ch, uint32_t baud)
 			huart1.Init.HwFlowCtl 		= UART_HWCONTROL_NONE;
 			huart1.Init.OverSampling 	= UART_OVERSAMPLING_16;
 
+			HAL_UART_DeInit(&huart1);
+
 			qbufferCreate(&qbuffer[ch], &rx_buf[0], 256);
 
       __HAL_RCC_DMA2_CLK_ENABLE();
@@ -79,7 +81,7 @@ bool uartOpen(uint8_t ch, uint32_t baud)
 uint32_t uartAvailable(uint8_t ch)
 {
 	uint32_t ret = 0;
-	static uint32_t pre_time;
+
 
 	switch(ch)
 	{
@@ -87,13 +89,7 @@ uint32_t uartAvailable(uint8_t ch)
 			ret = cdcAvailable();
 			break;
 		case _DEF_UART2:
-
 		  qbuffer[ch].in = qbuffer[ch].len - hdma_usart1_rx.Instance->NDTR;
-		  if (millis() - pre_time > 500)
-		  {
-		    uartPrintf(ch, "qbuffer[ch].in = %d\n", qbuffer[ch].in);
-		    pre_time = millis();
-		  }
 		  ret = qbufferAvailable(&qbuffer[ch]);
 		  break;
 	}
@@ -164,8 +160,11 @@ uint32_t uartGetBaud(uint8_t ch)
 	switch(ch)
 	{
 		case _DEF_UART1:
-			return cdcGetBaud();
+			ret = cdcGetBaud();
 			break;
+		case _DEF_UART2:
+		  ret = huart1.Init.BaudRate;
+		  break;
 	}
 	return ret;
 }

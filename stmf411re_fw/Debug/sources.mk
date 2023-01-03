@@ -24,6 +24,7 @@ SUBDIRS := \
 src/ap \
 src/bsp \
 src/bsp/startup \
+src/common/core \
 src/hw/driver \
 src/hw \
 src/lib/cube_F411CE/Debug/Core/Src \
