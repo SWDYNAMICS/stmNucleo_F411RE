@@ -74,3 +74,39 @@ __weak 타입은 다른 파일에서 같은 함수를 만들면 새롭게 만들
   그러나 물리적 유아트는 바꿔줘야함
   usb가 바뀌면 uart도 바뀌어야함.
   
+---------------------------------------------------------------------------------------------
+<UART #5 usb통신 개선>
+?: 용량 큰 데이터를 uart에서 usb로 보낼 때는 괜찮은데, 
+  usb에서 uart로 보낼 때 데이터가 빠지는 소실현상이 나타난다.
+  이 현상은..
+    usb에서 빠른 속도로 보내는 데이터를 버퍼링 한 후
+    uart가 read하는 속도가 느리기 때문에 덮어써지게 되는 것이다.
+      -> ★★★★★usb가 빠르게 못보내게 (버퍼가 받을 수 있는 정도로 속도를 제한해야한다) 
+
+
+lib에 USB_Device에 usbd_conf.c에
+HAL_PCD_SOFCallback
+    >>> usb는 1ms기준으로 frame 신호가 떨어지는데 이때마다 HAL_PCD_SOFCallback가 호출된다.
+    이걸로 버퍼가 쓸타이밍을 재기위한 모니터링을 usb sof 동기화를 맞춰서 처리해주면 가장 좋음 
+
+    이 함수를 브라우징하면 함수포인터를 정의한 USBD_ClassTypeDef가 나옴.
+    USBD_ClassTypeDef  USBD_CDC =
+    {
+      USBD_CDC_Init,
+      USBD_CDC_DeInit,
+      USBD_CDC_Setup,
+      NULL,                 /* EP0_TxSent, */
+      USBD_CDC_EP0_RxReady,
+      USBD_CDC_DataIn,
+      USBD_CDC_DataOut,
+      NULL,-> 우리가 쓰려는 함수포인터가 null로 되있음 이거를 우리가 지정한 함수포인터로 바꿔줌
+      NULL,
+      NULL,
+      USBD_CDC_GetHSCfgDesc,
+      USBD_CDC_GetFSCfgDesc,
+      USBD_CDC_GetOtherSpeedCfgDesc,
+      USBD_CDC_GetDeviceQualifierDescriptor,
+    };
+
+    usbd_cdc_if.c 에서 USBD_CDC_ReceivePacket(&hUsbDeviceFS)는 데이터를 받을 수 있음을 알려줌
+    USBD_LL_Init 에서 hpcd_USB_OTG_FS.Init.Sof_enable = ENABLE로설정하니 됨.
