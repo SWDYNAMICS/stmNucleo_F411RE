@@ -123,4 +123,8 @@ HAL_PCD_SOFCallback
 
 2. api
   sector 정보를 알고있어야함으로 구조체 선언
-  
+  const 로 주소와 길이 정보 저장
+  flashInSector
+    지워야할 섹터를 4가지 인덱스로 체크,삭
+    flash_start, flash_end 지워야할 주소 시작, 끝
+    sector_start, sector_end 매개변수로 받은 인덱스에 해당되는 섹터 시작주소, 끝주소
