@@ -75,7 +75,7 @@ __weak 타입은 다른 파일에서 같은 함수를 만들면 새롭게 만들
   usb가 바뀌면 uart도 바뀌어야함.
   
 ---------------------------------------------------------------------------------------------
-<UART #5 usb통신 개선>
+< UART #5 usb통신 개선 >
 ?: 용량 큰 데이터를 uart에서 usb로 보낼 때는 괜찮은데, 
   usb에서 uart로 보낼 때 데이터가 빠지는 소실현상이 나타난다.
   이 현상은..
@@ -110,3 +110,17 @@ HAL_PCD_SOFCallback
 
     usbd_cdc_if.c 에서 USBD_CDC_ReceivePacket(&hUsbDeviceFS)는 데이터를 받을 수 있음을 알려줌
     USBD_LL_Init 에서 hpcd_USB_OTG_FS.Init.Sof_enable = ENABLE로설정하니 됨.
+
+    *PCD stands for peripheral control driver.
+
+---------------------------------------------------------------------------------------------
+< FLASH #1 >
+내장 플래시 read & write
+
+1. printf 쓰는 법
+ -> __io_putchar 추가
+ -> write 함수가 콜백함수로써 호출되면서
+
+2. api
+  sector 정보를 알고있어야함으로 구조체 선언
+  

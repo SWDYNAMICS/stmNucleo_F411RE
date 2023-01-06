@@ -41,6 +41,9 @@ uint32_t cdcAvailable(void)
 
 uint8_t cdcRead(void)
 {
+  /* 1. Read Data and return
+   * 2. rx_out index increase
+   * */
 	uint8_t ret;
 	ret = rx_buf[rx_out];
 
@@ -63,6 +66,8 @@ void cdcDataIn(uint8_t rx_data)
 }
 uint32_t cdcWrite(uint8_t *pData, uint32_t length)
 {
+  /* 1. basically transmit..
+   * */
 	uint32_t pre_time;
 	uint8_t ret;
 
@@ -82,6 +87,7 @@ uint32_t cdcWrite(uint8_t *pData, uint32_t length)
 
 		if(millis() - pre_time >= 100)
 		{
+		  //time out
 			break;
 		}
 
