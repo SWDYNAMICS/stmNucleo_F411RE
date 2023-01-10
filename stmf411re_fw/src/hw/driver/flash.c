@@ -10,6 +10,7 @@
 
 typedef struct
 {
+  uint32_t sector;
   uint32_t addr;
   uint32_t length;
 }flash_tbl_t;
@@ -18,14 +19,14 @@ static bool flashInSector(uint16_t sector_num, uint32_t addr, uint32_t length);
 
 const flash_tbl_t flash_tbl[FLASH_SECTOR_MAX] =
 {
-  {0x08000000, 16384},
-  {0x08004000, 16384},
-  {0x08008000, 16384},
-  {0x0800C000, 16384},
-  {0x08010000, 65536},
-  {0x08020000, 131072},
-  {0x08040000, 131072},
-  {0x08060000, 131072}
+  {FLASH_SECTOR_0, 0x08000000, 16384},
+  {FLASH_SECTOR_1, 0x08004000, 16384},
+  {FLASH_SECTOR_2, 0x08008000, 16384},
+  {FLASH_SECTOR_3, 0x0800C000, 16384},
+  {FLASH_SECTOR_4, 0x08010000, 65536},
+  {FLASH_SECTOR_5, 0x08020000, 131072},
+  {FLASH_SECTOR_6, 0x08040000, 131072},
+  {FLASH_SECTOR_7, 0x08060000, 131072}
 };
 
 bool flashInit(void)
@@ -39,8 +40,35 @@ bool flashErase(uint32_t addr, uint32_t length)
   FLASH_EraseInitTypeDef init;
   uint32_t sector_error;
 
-  status = HAL_FLASHEx_Erase(&init, &sector_error);
-  //YOUTUBE 31:58 END POINT
+  int16_t start_sector_num = -1;
+  uint32_t sector_count    = 0;
+
+  for(int i=0; i<FLASH_SECTOR_MAX; i++)
+  {
+    if(flashInSector(i, addr, length) == true)
+    {
+      if(start_sector_num > 0)
+      {
+        start_sector_num = i;
+      }
+      sector_count++;
+    }
+  }
+
+  if(sector_count > 0 )
+  {
+    init.TypeErase    = FLASH_TYPEERASE_SECTORS;
+    init.Banks        = FLASH_BANK_1;
+    init.Sector       = flash_tbl[start_sector_num].sector;
+    init.NbSectors    = sector_count;
+    init.VoltageRange = FLASH_VOLTAGE_RANGE_3;
+
+    status = HAL_FLASHEx_Erase(&init, &sector_error);
+    if(status == HAL_OK)
+    {
+      ret = true;
+    }
+  }
 
   return ret;
 }
