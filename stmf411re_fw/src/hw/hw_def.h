@@ -24,4 +24,8 @@
 #define _USE_HW_UART
 #define 	   HW_UART_MAX_CH					  2
 
+#define _USE_HW_CLI
+#define      HW_CLI_LINE_HIS_MAX      4   /*using sram, able to see prev command*/
+#define      HW_CLI_LINE_BUF_MAX      32  /*character max length*/
+
 #endif /* SRC_HW_HW_DEF_H_ */
