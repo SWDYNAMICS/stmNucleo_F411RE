@@ -217,3 +217,15 @@ cliLineAdd 엔터를 쳤을 때 history buffer에 저장하는 함수
 특수키 처리..
 
 
+# 전압 이슈가 있는 듯
+  USB 연결이 원할치 않음
+  하드폴트 발생
+
+  HAL_UART_Transmit에서 생긴 이슈-> 어찌됐던 해결할것
+  
+  https://ez2dj.tistory.com/115 
+  아몰라 ㅅㅂ 그냥 부트로더 없애고FW 만 write 
+
+# cli_arg_t 이새키는 왜 또 unkwon name 이라고 하는거야 ㅅㅂ(led.c)
+
+일단 run config 를 초기화했더니 그나마 나아졌는데 모르것다..

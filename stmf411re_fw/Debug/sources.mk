@@ -28,14 +28,6 @@ src/bsp/startup \
 src/common/core \
 src/hw/driver \
 src/hw \
-src/lib/cube_F411CE/Debug/Core/Src \
-src/lib/cube_F411CE/Debug/Core/Startup \
-src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src \
-src/lib/cube_F411CE/Debug/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src \
-src/lib/cube_F411CE/Debug/Middlewares/ST/STM32_USB_Device_Library/Core/Src \
-src/lib/cube_F411CE/Debug/USB_DEVICE/App \
-src/lib/cube_F411CE/Debug/USB_DEVICE/Target \
-src/lib/cube_F411CE/Debug \
 src/lib/cube_F411CE/Drivers/STM32F4xx_HAL_Driver/Src \
 src/lib/cube_F411CE/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src \
 src/lib/cube_F411CE/Middlewares/ST/STM32_USB_Device_Library/Core/Src \
