@@ -18,17 +18,10 @@ RM := rm -rf
 -include src/lib/cube_F411CE/Debug/USB_DEVICE/App/subdir.mk
 -include src/lib/cube_F411CE/Debug/Middlewares/ST/STM32_USB_Device_Library/Core/Src/subdir.mk
 -include src/lib/cube_F411CE/Debug/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/subdir.mk
-<<<<<<< Updated upstream
--include src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
--include src/lib/cube_F411CE/Debug/Core/Startup/subdir.mk
--include src/lib/cube_F411CE/Debug/Core/Src/subdir.mk
--include src/lib/cube_F411CE/Debug/subdir.mk
-=======
 -include src/lib/FreeRTOS/Source/portable/MemMang/subdir.mk
 -include src/lib/FreeRTOS/Source/portable/GCC/ARM_CM3/subdir.mk
 -include src/lib/FreeRTOS/Source/CMSIS_RTOS/subdir.mk
 -include src/lib/FreeRTOS/Source/subdir.mk
->>>>>>> Stashed changes
 -include src/hw/driver/subdir.mk
 -include src/hw/subdir.mk
 -include src/common/core/subdir.mk
@@ -76,6 +69,9 @@ default.size.stdout \
 OBJDUMP_LIST += \
 stmf411re_fw.list \
 
+OBJCOPY_BIN += \
+stmf411re_fw.bin \
+
 
 # All Target
 all: main-build
@@ -99,12 +95,17 @@ stmf411re_fw.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
+stmf411re_fw.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "stmf411re_fw.bin"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 # Other Targets
 clean:
-	-$(RM) default.size.stdout stmf411re_fw.elf stmf411re_fw.list stmf411re_fw.map
+	-$(RM) default.size.stdout stmf411re_fw.bin stmf411re_fw.elf stmf411re_fw.list stmf411re_fw.map
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'

@@ -51,5 +51,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# IDE auto-create debug folder
-Debug/
+#debug exclude
+stmf411re_fw/Debug/
+stmf411re_boot/Debug/

@@ -21,7 +21,7 @@ bool usbInit(void)
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_RESET);
-	delay(100);
+	delay(200);
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, GPIO_PIN_SET);
 
 	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;

@@ -47,7 +47,7 @@ bool flashErase(uint32_t addr, uint32_t length)
   {
     if(flashInSector(i, addr, length) == true)
     {
-      if(start_sector_num > 0)
+      if(start_sector_num < 0)
       {
         start_sector_num = i;
       }
@@ -57,6 +57,7 @@ bool flashErase(uint32_t addr, uint32_t length)
 
   if(sector_count > 0 )
   {
+    HAL_FLASH_Unlock();
     init.TypeErase    = FLASH_TYPEERASE_SECTORS;
     init.Banks        = FLASH_BANK_1;
     init.Sector       = flash_tbl[start_sector_num].sector;
@@ -68,17 +69,53 @@ bool flashErase(uint32_t addr, uint32_t length)
     {
       ret = true;
     }
+    HAL_FLASH_Lock();
   }
 
   return ret;
 }
 bool flashWrite(uint32_t addr, uint8_t *p_data, uint32_t length)
 {
+  bool ret = true;
 
+  HAL_StatusTypeDef status;
+
+  if(addr%2 != 0)
+  {
+    return false;
+  }
+  HAL_FLASH_Unlock();
+  for(int i=0; i<length; i+=2)
+  {//per HALFWORD 16bit
+    uint16_t data;
+
+    data  = p_data[i+0] << 0; // is equal = *(p_data + i);???
+    data |= p_data[i+1] << 8;
+
+    status = HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, addr + i, (uint64_t)data);// 16bit write
+    if(status != HAL_OK)
+    {
+      ret = false;
+      break;
+    }
+  }
+
+  HAL_FLASH_Lock();
+
+  return ret;
 }
 bool flashRead(uint32_t addr, uint8_t *p_data, uint32_t length)
 {
+  bool ret = true;
 
+  uint8_t *p_byte = (uint8_t *)addr;//-> changing address meaning value
+
+  for(int i=0; i<length; i++)
+  {
+    p_data[i] = p_byte[i];
+  }
+
+  return ret;
 }
 bool flashInSector(uint16_t sector_num, uint32_t addr, uint32_t length)
 {

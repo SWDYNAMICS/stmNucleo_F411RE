@@ -129,10 +129,9 @@ HAL_PCD_SOFCallback
     flash_start, flash_end 지워야할 주소 시작, 끝
     sector_start, sector_end 매개변수로 받은 인덱스에 해당되는 섹터 시작주소, 끝주소
 
-3. FLASH_EraseInitTypeDef init 멤버에 무엇을 넣어야할지?
+3. flashErase 함수 
+  FLASH_EraseInitTypeDef init 멤버에 무엇을 넣어야할지?
   구조체 타입선언에서 뭘참조하라는지 친절하게 설명되어있으니 찾기에서 해당 상수나 값들을 불러오면된다
-<<<<<<< Updated upstream
-=======
 ---------------------------------------------------------------------------------------------
 < FLASH #2 >
 1. HAL_FLASHEx_Erase 함수를 사용하기 위해 HAL_FLASH_Unlock() 함수를 사용하라 되어있지만 내 주석엔
@@ -265,4 +264,3 @@ LED 스레드 만들기
 
 os 
 ---------------------------------------------------------------------------------------------
->>>>>>> Stashed changes
