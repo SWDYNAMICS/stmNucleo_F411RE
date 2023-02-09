@@ -18,10 +18,17 @@ RM := rm -rf
 -include src/lib/cube_F411CE/Debug/USB_DEVICE/App/subdir.mk
 -include src/lib/cube_F411CE/Debug/Middlewares/ST/STM32_USB_Device_Library/Core/Src/subdir.mk
 -include src/lib/cube_F411CE/Debug/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/subdir.mk
+<<<<<<< Updated upstream
 -include src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include src/lib/cube_F411CE/Debug/Core/Startup/subdir.mk
 -include src/lib/cube_F411CE/Debug/Core/Src/subdir.mk
 -include src/lib/cube_F411CE/Debug/subdir.mk
+=======
+-include src/lib/FreeRTOS/Source/portable/MemMang/subdir.mk
+-include src/lib/FreeRTOS/Source/portable/GCC/ARM_CM3/subdir.mk
+-include src/lib/FreeRTOS/Source/CMSIS_RTOS/subdir.mk
+-include src/lib/FreeRTOS/Source/subdir.mk
+>>>>>>> Stashed changes
 -include src/hw/driver/subdir.mk
 -include src/hw/subdir.mk
 -include src/common/core/subdir.mk

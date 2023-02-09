@@ -27,14 +27,24 @@ src/bsp/startup \
 src/common/core \
 src/hw/driver \
 src/hw \
+<<<<<<< Updated upstream
 src/lib/cube_F411CE/Debug/Core/Src \
 src/lib/cube_F411CE/Debug/Core/Startup \
 src/lib/cube_F411CE/Debug/Drivers/STM32F4xx_HAL_Driver/Src \
+=======
+src/lib/FreeRTOS/Source/CMSIS_RTOS \
+src/lib/FreeRTOS/Source \
+src/lib/FreeRTOS/Source/portable/GCC/ARM_CM3 \
+src/lib/FreeRTOS/Source/portable/MemMang \
+>>>>>>> Stashed changes
 src/lib/cube_F411CE/Debug/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src \
 src/lib/cube_F411CE/Debug/Middlewares/ST/STM32_USB_Device_Library/Core/Src \
 src/lib/cube_F411CE/Debug/USB_DEVICE/App \
 src/lib/cube_F411CE/Debug/USB_DEVICE/Target \
+<<<<<<< Updated upstream
 src/lib/cube_F411CE/Debug \
+=======
+>>>>>>> Stashed changes
 src/lib/cube_F411CE/Drivers/STM32F4xx_HAL_Driver/Src \
 src/lib/cube_F411CE/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src \
 src/lib/cube_F411CE/Middlewares/ST/STM32_USB_Device_Library/Core/Src \

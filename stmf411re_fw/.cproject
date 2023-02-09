@@ -27,8 +27,8 @@
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetplatform.1782599285" isAbstract="false" osList="all" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetplatform"/>
 							<builder buildPath="${workspace_loc:/stmf411re_fw}/Debug" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder.1796347709" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder"/>
 							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.1789902577" name="MCU GCC Assembler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler">
-								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.1499056838" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.value.g3" valueType="enumerated"/>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols.2146625131" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols" valueType="definedSymbols">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.1499056838" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.value.g3" valueType="enumerated"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols.2146625131" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="DEBUG"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input.871144271" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input"/>
@@ -41,6 +41,9 @@
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths.1658312029" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/FreeRTOS/Source/CMSIS_RTOS}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/FreeRTOS/Source/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/FreeRTOS/Source/portable/GCC/ARM_CM3}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ap}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/bsp}&quot;"/>
@@ -81,7 +84,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/lib/cube_F411CE/Core|src/lib/cube_f411/Core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/lib/FreeRTOS/Source/portable/MemMang/heap_5.c|src/lib/FreeRTOS/Source/portable/MemMang/heap_3.c|src/lib/FreeRTOS/Source/portable/MemMang/heap_2.c|src/lib/FreeRTOS/Source/portable/MemMang/heap_1.c|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM7_MPU|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM7|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM4F|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM4_MPU|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM33|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM3_MPU|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM23_NTZ|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM23|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM0|src/lib/FreeRTOS/Source/portable/Tasking|src/lib/FreeRTOS/Source/portable/RVDS|src/lib/FreeRTOS/Source/portable/Keil|src/lib/FreeRTOS/Source/portable/IAR|src/lib/FreeRTOS/Source/portable/Common|src/lib/FreeRTOS/Source/CMSIS_RTOS_V2|src/lib/cube_F411CE/Core|src/lib/cube_f411/Core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -152,7 +155,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src/lib/cube_F411CE/Core|src/lib/cube_f411/Core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/lib/FreeRTOS/Source/portable/MemMang/heap_5.c|src/lib/FreeRTOS/Source/portable/MemMang/heap_3.c|src/lib/FreeRTOS/Source/portable/MemMang/heap_2.c|src/lib/FreeRTOS/Source/portable/MemMang/heap_1.c|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM7_MPU|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM7|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM4F|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM4_MPU|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM33|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM3_MPU|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM23_NTZ|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM23|src/lib/FreeRTOS/Source/portable/GCC/ARM_CM0|src/lib/FreeRTOS/Source/portable/Tasking|src/lib/FreeRTOS/Source/portable/RVDS|src/lib/FreeRTOS/Source/portable/Keil|src/lib/FreeRTOS/Source/portable/IAR|src/lib/FreeRTOS/Source/portable/Common|src/lib/FreeRTOS/Source/CMSIS_RTOS_V2|src/lib/cube_F411CE/Core|src/lib/cube_f411/Core" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
