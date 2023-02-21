@@ -228,4 +228,41 @@ cliLineAdd 엔터를 쳤을 때 history buffer에 저장하는 함수
 
 # cli_arg_t 이새키는 왜 또 unkwon name 이라고 하는거야 ㅅㅂ(led.c)
 
+
 일단 run config 를 초기화했더니 그나마 나아졌는데 모르것다..
+
+---------------------------------------------------------------------------------------------
+<Free rtos>
+1. MX 에서 적용안하고 직접 Library를 복사해서 포팅할 것
+
+C:\Users\USER\STM32Cube\Repository\STM32Cube_FW_F4_V1.27.1\Middlewares
+
+cmsis_os를 적용한 os면 같은 라이브러리 함수를 사용가능.
+
+heap_1~4 테스크의 스택메모리를 어떻게 관리할것인가에 따라 함수다름
+4: 전역변수로 스택메모리를 할당해서 사용
+
+SysTick_Handler -> CMSIS 사용할것이기떄문에 (stm32f4xx_it.c)
+//#define xPortSysTickHandler SysTick_Handler /*take control from rtos config -> HAL driver systick interrupt handler*/
+
+osSystickHandler를 interrupt 함수쪽으로 (SysTic_Handler)
+  Hal driver 의 systick을 별도로 사용하지 않으면 문제되는 것: 인터럽트 우선순위가 가장 높기에
+  rtos 관련 systick 함수가 실행되지 않는 문제가 생길 수 있다. 코드(osSystickHandler();) 복붙 
+
+typedef portSTACK_TYPE StackType_t 의 스택 타입이 uint32_t 이기 때문에
+메인 함수에서 osThreadDef
+ osThreadDef(threadMain, threadMain, _HW_DEF_RTOS_THREAD_PRI_MAIN, 0, _HW_DEF_RTOS_THREAD_MEM_MAIN);
+ _HW_DEF_RTOS_THREAD_MEM_MAIN에 곱하기 4가되어 적용될 것을 방지하여 _HW_DEF_RTOS_MEM_SIZE(x)  ((x)/4) 로 def
+
+arm에서 관리하는 cmsis os 사이트를 들어가면 doc과 ref와 ex 있다.
+
+os 커널이 메인에서 시작되면 threadMain이 하나의 스레드로 동작한다.
+
+LED 스레드 만들기
+  delay 함수 수정해야함.
+    osDelay를 주는 순간 호출한 쓰레드는 딜레이가 되고 다른 쓰레드는 영향 없음 그리고 OS는 딜레이를 알아차린다
+    HAL_delay 함수는 OS가 알아차리지 못하며 blocking delay만 제공한
+
+os 
+---------------------------------------------------------------------------------------------
+

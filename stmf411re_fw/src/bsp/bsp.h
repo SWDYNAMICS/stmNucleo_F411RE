@@ -18,6 +18,7 @@
 #endif
 #include "stm32f4xx_hal.h"
 #include "usb_device.h"
+#include "cmsis_os.h"
 
 void bspInit(void);
 void delay(uint32_t ms);
